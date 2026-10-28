@@ -297,9 +297,10 @@ sequenceDiagram
     CN-->>PN: 200 Ack
 ```
 
-- A PN MAY send multiple callbacks carrying the same `messageId` if the action semantics permit it.
-- The CN MUST accept and process each callback independently. The CN MUST NOT discard a callback solely because a prior callback with the same `messageId` was already received.
-- The CN SHOULD treat later callbacks with the same `messageId` as incremental state updates for the same request.
+- A PN MAY send multiple successful callbacks carrying the same `messageId` if the action semantics permit it.
+- The CN MUST accept and process each successful callback independently. The CN MUST NOT discard a successful callback solely because a prior successful callback with the same `messageId` was already received.
+- The CN SHOULD treat later successful callbacks with the same `messageId` as incremental state updates for the same request.
+- A callback carrying a top-level `error` terminates the callback sequence for that `messageId`. The sender MUST NOT send another callback with that `messageId`; retrying requires a new forward request with a new `messageId`. The enclosing transaction identified by `transactionId` remains active unless it independently reaches a terminal state.
 
 #### 10. Multicast Flows
 
@@ -431,7 +432,7 @@ sequenceDiagram
 | CON-013-12 | A CN MUST accept and process authenticated PN-initiated callbacks. A CN MUST NOT reject a callback solely because its `messageId` does not match a pending forward request. | MUST |
 | CON-013-13 | A PN sending a PN-initiated callback MUST include the active `context.transactionId` and MUST assign a fresh `context.messageId`. | MUST |
 | CON-013-14 | A CN MUST reject any PN-initiated callback that does not carry a valid request signature. | MUST |
-| CON-013-15 | A CN MUST NOT discard a callback solely because a prior callback with the same `messageId` was already received. | MUST NOT |
+| CON-013-15 | A CN MUST NOT discard a successful callback solely because a prior successful callback with the same `messageId` was already received. | MUST NOT |
 | CON-013-16 | A `messageId` MUST NOT be reused across different requests within or across transactions. | MUST NOT |
 | CON-013-17 | The `transactionId` MUST NOT be reused across different business transactions. | MUST NOT |
 | CON-013-18 | Every node MUST authenticate each incoming message independently, regardless of prior messages in the same transaction. See [NFH-007](./Authentication_and_Trust.md). | MUST |
@@ -442,6 +443,7 @@ sequenceDiagram
 | CON-013-23 | A message sender SHOULD treat the combination of `context.messageId` and its outgoing request signature as the unique deduplication key for long-term message deduplication. | SHOULD |
 | CON-013-24 | A DS MUST aggregate all PN responses and static catalog data before sending `on_discover` to the CN. Direct forwarding of PN `on_discover` responses to the CN MUST NOT be implemented. | MUST |
 | CON-013-25 | A DS MAY send multiple paginated `on_discover` callbacks for a single `discover` request. The CN MUST NOT discard later pages. | MAY |
+| CON-013-26 | A callback carrying a top-level `error` terminates the callback sequence for that `messageId`. The sender MUST NOT send another callback with the same `messageId`; any retry MUST use a new forward request and a new `messageId`. | MUST NOT |
 
 ### Cross-cutting Considerations
 

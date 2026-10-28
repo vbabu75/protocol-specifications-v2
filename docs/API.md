@@ -75,6 +75,8 @@ To be added
 
 Forward requests use `context` and `message` envelopes. Asynchronous callback envelopes carry `context` and exactly one of `message` for success or `error` for a processing failure.
 
+A callback carrying `error` terminates the callback sequence associated with its `context.messageId`; the sender MUST NOT send another callback with that `messageId`. A retry requires a new forward request with a new `messageId`. This terminates only the individual request–callback exchange, not the transaction identified by `context.transactionId`.
+
 Standard response families are:
 
 - `Ack`
