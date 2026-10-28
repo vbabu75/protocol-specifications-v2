@@ -86,7 +86,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Provider Node (PN):** A node that receives forward requests, sends immediate acknowledgements, and later delivers callbacks. Formerly called BPP.
 - **Discovery Server (DS):** A node that hosts catalogs and responds to `discover` requests from CNs. To build a dynamic catalog (e.g., real-time availability), a DS may fan out `discover` internally to multiple PNs and aggregate their responses — along with any statically held catalog data — before sending a single `on_discover` back to the CN. A DS MAY also send multiple paginated `on_discover` callbacks for a single `discover` request. Direct forwarding of PN responses to the CN without aggregation is deprecated in Beckn v2. Formerly called BG (Beckn Gateway).
 - **Forward request:** A message sent from a CN to a PN (or from a CN to a DS for discovery) carrying a `context` and `message` payload. The action name corresponds to a Beckn lifecycle step (e.g., `discover`, `select`, `confirm`). When implemented on HTTP, this is a POST request.
-- **Callback:** A message sent in the reverse direction carrying a `context` and `message` payload. The action name is the forward action name prefixed with `on_` (e.g., `on_discover`, `on_select`, `on_confirm`). When implemented on HTTP, this is a POST request.
+- **Callback:** A message sent in the reverse direction carrying `context` and exactly one of `message` for a successful outcome or `error` for a processing failure. The action name is the forward action name prefixed with `on_` (e.g., `on_discover`, `on_select`, `on_confirm`). When implemented on HTTP, this is a POST request.
 - **Ack:** A synchronous HTTP response indicating that the receiving node accepted and queued the request for processing. An Ack is not a business response.
 - **Nack:** A synchronous HTTP response indicating that the receiving node rejected the request. No callback will follow a Nack.
 - **`context.messageId`:** A UUID assigned by the initiating node to a single forward request. The responding node echoes this value in the corresponding callback, allowing the initiator to correlate the callback to its originating request.
@@ -621,7 +621,7 @@ TBA.
 
 **Q: Can Beckn Protocol be implemented over communication channels other than HTTP, such as WebSockets, MQTT, or a message queue?**
 
-Yes. The protocol specifies an asynchronous messaging model that is transport-agnostic. HTTP is the reference implementation described in this RFC, but the request–callback pattern, `messageId` correlation, and `transactionId` scoping apply to any transport that can carry the Beckn `context` and `message` envelope. Transport-specific binding rules for non-HTTP implementations are outside the scope of this RFC.
+Yes. The protocol specifies an asynchronous messaging model that is transport-agnostic. HTTP is the reference implementation described in this RFC, but the request–callback pattern, `messageId` correlation, and `transactionId` scoping apply to any transport that can carry the Beckn envelope: `context` with `message` for forward requests, and `context` with exactly one of `message` or `error` for asynchronous callbacks. Transport-specific binding rules for non-HTTP implementations are outside the scope of this RFC.
 
 ## Acknowledgements
 

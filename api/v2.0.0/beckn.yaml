@@ -208,7 +208,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -220,6 +219,13 @@ paths:
                         const: on_discover
                 message:
                   $ref: '#/components/schemas/OnDiscoverAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -317,7 +323,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -329,6 +334,13 @@ paths:
                         const: on_select
                 message:
                   $ref: '#/components/schemas/OnSelectAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -427,7 +439,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -439,6 +450,13 @@ paths:
                         const: on_init
                 message:
                   $ref: '#/components/schemas/OnInitAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -539,7 +557,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -551,6 +568,13 @@ paths:
                         const: on_confirm
                 message:
                   $ref: '#/components/schemas/OnConfirmAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -653,7 +677,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -665,6 +688,13 @@ paths:
                         const: on_status
                 message:
                   $ref: '#/components/schemas/OnStatusAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -764,7 +794,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -776,6 +805,13 @@ paths:
                         const: on_track
                 message:
                   $ref: '#/components/schemas/OnTrackAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -884,7 +920,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -896,6 +931,13 @@ paths:
                         const: on_update
                 message:
                   $ref: '#/components/schemas/OnUpdateAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1004,7 +1046,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -1016,6 +1057,13 @@ paths:
                         const: on_cancel
                 message:
                   $ref: '#/components/schemas/OnCancelAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1111,7 +1159,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -1123,6 +1170,13 @@ paths:
                         const: on_rate
                 message:
                   $ref: '#/components/schemas/OnRateAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1220,7 +1274,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -1232,6 +1285,13 @@ paths:
                         const: on_support
                 message:
                   $ref: '#/components/schemas/OnSupportAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1519,7 +1579,6 @@ paths:
               type: object
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -1531,6 +1590,13 @@ paths:
                         const: catalog/on_publish
                 message:
                   $ref: '#/components/schemas/CatalogOnPublishAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1931,7 +1997,6 @@ paths:
               additionalProperties: false
               required:
               - context
-              - message
               properties:
                 context:
                   allOf:
@@ -1943,6 +2008,13 @@ paths:
                         const: catalog/on_pull
                 message:
                   $ref: '#/components/schemas/CatalogPullCallbackAction'
+                error:
+                  $ref: '#/components/schemas/AsyncError'
+              oneOf:
+              - required:
+                - message
+              - required:
+                - error
       responses:
         '200':
           $ref: '#/components/responses/Ack'
