@@ -2771,15 +2771,10 @@ components:
         \ callback phase of any Beckn interaction where an error must be conveyed after\
         \ an initial ACK has already been returned. Both the PN and CN MAY produce\
         \ it when reporting failures in asynchronous processing to their counterpart.\n\
-        \nRelationship: Extends the base Error schema with JSON-LD type annotations,\
-        \ allowing linked-data consumers to interpret error codes using the Beckn error\
-        \ vocabulary. Additional properties are permitted to carry domain-specific\
-        \ error context."
+        \nRelationship: Specializes the base Error schema for asynchronous callbacks\
+        \ while preserving its canonical, closed property set."
       allOf:
       - $ref: '#/components/schemas/Error'
-      - type: object
-        properties: {}
-        additionalProperties: true
 
     Attributes:
       description: "A JSON-LD aware extensibility container that carries domain-specific\
