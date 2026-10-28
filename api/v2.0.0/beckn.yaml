@@ -189,9 +189,8 @@ paths:
         \ catalogs that match the intent submitted in a prior /discover request.\n\n\
         Additional preconditions: A /discover request MUST have been sent by the CN\
         \ and accepted (200 Ack) by the DS before this callback is triggered.\n\nThe\
-        \ message MUST contain either an OnDiscoverAction with one or more Catalog\
-        \ objects matching the original intent, or an AsyncError describing why the\
-        \ request could not be processed.\n\nCallback relationship: Triggered by the\
+        \ message MUST contain an OnDiscoverAction with one or more Catalog objects\
+        \ matching the original intent.\n\nCallback relationship: Triggered by the\
         \ DS after evaluating the /discover request against its indexed catalog store.\
         \ The CN MUST use the messageId in Context to correlate this callback with\
         \ the originating /discover call.\n\nResponse codes: Ack, NackBadRequest,\
@@ -220,10 +219,7 @@ paths:
                         type: string
                         const: on_discover
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnDiscoverAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnDiscoverAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -300,9 +296,8 @@ paths:
         \ computed from the resources and offers submitted in the preceding /select\
         \ request.\n\nAdditional preconditions: A /select request MUST have been sent\
         \ by the CN and accepted (200 Ack) by the PN before this callback is triggered.\n\
-        \nThe message MUST contain either an OnSelectAction with a Contract object updated\
-        \ to include offer-level considerations and a total priced quote, or an AsyncError\
-        \ describing why the request could not be processed. The CN uses\
+        \nThe message MUST contain an OnSelectAction with a Contract object updated\
+        \ to include offer-level considerations and a total priced quote. The CN uses\
         \ this quote to decide whether to proceed to /init.\n\nCallback relationship:\
         \ This endpoint is triggered by the PN after evaluating the selection and\
         \ computing a priced quote. The CN MUST use the messageId in Context to correlate\
@@ -333,10 +328,7 @@ paths:
                         type: string
                         const: on_select
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnSelectAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnSelectAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -414,10 +406,9 @@ paths:
         \ and any settlement conditions.\n\nAdditional preconditions: A /init request\
         \ MUST have been sent by the CN and accepted (200 Ack) by the PN before\
         \ this callback is triggered. The PN MUST NOT request or collect payment\
-        \ before this stage.\n\nThe message MUST contain either an OnInitAction with a Contract\
+        \ before this stage.\n\nThe message MUST contain an OnInitAction with a Contract\
         \ object that reflects the finalized draft state including payment terms, billing\
-        \ confirmation, and settlement placeholders, or an AsyncError describing why\
-        \ the request could not be processed. The CN reviews these terms before\
+        \ confirmation, and settlement placeholders. The CN reviews these terms before\
         \ proceeding to /confirm.\n\nCallback relationship: This endpoint is triggered\
         \ by the PN after generating the final draft contract in response to /init.\
         \ The CN MUST use the messageId in Context to correlate this callback and\
@@ -447,10 +438,7 @@ paths:
                         type: string
                         const: on_init
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnInitAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnInitAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -529,11 +517,10 @@ paths:
         \ after verifying payment and activating the commitment.\n\nAdditional preconditions:\
         \ A /confirm request MUST have been sent by the CN and accepted (200 Ack)\
         \ by the PN. The PN MUST have verified payment proof before triggering this\
-        \ callback.\n\nThe message MUST contain either an OnConfirmAction with the Contract\
+        \ callback.\n\nThe message MUST contain an OnConfirmAction with the Contract\
         \ object whose status is set to ACTIVE, whose id field carries the PN-assigned\
         \ contract identifier, and whose performance array reflects the initial fulfillment\
-        \ state, or an AsyncError describing why the request could not be processed.\n\nCallback\
-        \ relationship: This endpoint is triggered by the PN after\
+        \ state.\n\nCallback relationship: This endpoint is triggered by the PN after\
         \ verifying payment and activating the contract in response to /confirm. The\
         \ CN MUST use the messageId in Context to correlate this callback and MUST\
         \ store the contract id for subsequent status, track, update, cancel, rate,\
@@ -563,10 +550,7 @@ paths:
                         type: string
                         const: on_confirm
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnConfirmAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnConfirmAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -648,10 +632,9 @@ paths:
         \ (200 Ack) by the PN, or the PN is sending a proactive push for a significant\
         \ state change on an already-confirmed contract. The PN MAY send proactive\
         \ /on_status callbacks without a preceding /status request for significant\
-        \ contract state transitions.\n\nThe message MUST contain either an OnStatusAction\
+        \ contract state transitions.\n\nThe message MUST contain an OnStatusAction\
         \ with the full Contract object reflecting the current status and performance\
-        \ state, or an AsyncError describing why the request could not be processed.\n\nCallback\
-        \ relationship: This endpoint is triggered by the PN either\
+        \ state.\n\nCallback relationship: This endpoint is triggered by the PN either\
         \ in response to a /status request or proactively when a significant contract\
         \ state change occurs. The CN MUST use the messageId in Context to correlate\
         \ solicited callbacks and MUST handle unsolicited callbacks by updating the\
@@ -681,10 +664,7 @@ paths:
                         type: string
                         const: on_status
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnStatusAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnStatusAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -764,10 +744,9 @@ paths:
         \ subscribe to real-time fulfillment position and progress updates.\n\nAdditional\
         \ preconditions: A /track request MUST have been sent by the CN and accepted\
         \ (200 Ack) by the PN before this callback is triggered.\n\nThe message MUST\
-        \ contain either an OnTrackAction with a Tracking object that includes a url\
-        \ for the real-time data stream and a status field indicating whether tracking\
-        \ is ACTIVE or INACTIVE, or an AsyncError describing why the request could\
-        \ not be processed.\n\nCallback relationship: This endpoint is triggered by the\
+        \ contain an OnTrackAction with a Tracking object that includes a url for the\
+        \ real-time data stream and a status field indicating whether tracking is ACTIVE\
+        \ or INACTIVE.\n\nCallback relationship: This endpoint is triggered by the\
         \ PN in response to a /track request. The CN MUST use the messageId in Context\
         \ to correlate this callback with the originating /track call and SHOULD connect\
         \ to the provided tracking URL or WebSocket endpoint to receive real-time updates.\n\
@@ -796,10 +775,7 @@ paths:
                         type: string
                         const: on_track
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnTrackAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnTrackAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -887,9 +863,8 @@ paths:
         \nAdditional preconditions: Either an /update request MUST have been sent by\
         \ the CN and accepted (200 Ack) by the PN, or the PN is sending a proactive\
         \ update for a PN-initiated contract mutation on an already-confirmed\
-        \ contract.\n\nThe message MUST contain either an OnUpdateAction with the Contract\
-        \ object, or an AsyncError describing why the request could not be processed.\
-        \ The context.try field echoes the value from the originating /update\
+        \ contract.\n\nThe message MUST contain an OnUpdateAction with the Contract\
+        \ object. The context.try field echoes the value from the originating /update\
         \ request to allow the CN to interpret whether this is a preview or a committed\
         \ change.\n\nCallback relationship: This endpoint is triggered by the PN either\
         \ in response to an /update request or proactively for PN-initiated mutations.\
@@ -920,10 +895,7 @@ paths:
                         type: string
                         const: on_update
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnUpdateAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnUpdateAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1009,8 +981,7 @@ paths:
         \ the confirmed cancelled contract (when responding to a committed cancellation).\n\
         \nAdditional preconditions: A /cancel request MUST have been sent by the CN\
         \ and accepted (200 Ack) by the PN before this callback is triggered.\n\n\
-        The message MUST contain either an OnCancelAction with the Contract object or\
-        \ an AsyncError describing why the request could not be processed. When context.try\
+        The message MUST contain an OnCancelAction with the Contract object. When context.try\
         \ was true in the originating /cancel request, the Contract carries cancellation\
         \ policy, fees, and refund timeline without state change. When context.try\
         \ was false, the Contract carries status CANCELLED and updated settlement information\
@@ -1044,10 +1015,7 @@ paths:
                         type: string
                         const: on_cancel
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnCancelAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnCancelAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1124,10 +1092,9 @@ paths:
         \ ratings have been recorded and optionally returning aggregate rating data.\n\
         \nAdditional preconditions: A /rate request MUST have been sent by the CN\
         \ and accepted (200 Ack) by the PN before this callback is triggered.\n\n\
-        The message MUST contain either an OnRateAction with a ratings array carrying\
-        \ confirmation of the recorded ratings and MAY include aggregate rating snapshots\
-        \ for the rated entities, or an AsyncError describing why the request could\
-        \ not be processed.\n\nCallback relationship: This endpoint is triggered by the\
+        The message MUST contain an OnRateAction with a ratings array carrying confirmation\
+        \ of the recorded ratings and MAY include aggregate rating snapshots for the\
+        \ rated entities.\n\nCallback relationship: This endpoint is triggered by the\
         \ PN in response to a /rate request. The CN MUST use the messageId in Context\
         \ to correlate this callback with the originating /rate call.\n\nResponse codes:\
         \ Ack, NackBadRequest, NackUnauthorized, ServerError."
@@ -1155,10 +1122,7 @@ paths:
                         type: string
                         const: on_rate
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnRateAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnRateAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1236,9 +1200,8 @@ paths:
         \ contact details including the created or linked ticket information.\n\nAdditional\
         \ preconditions: A /support request MUST have been sent by the CN and accepted\
         \ (200 Ack) by the PN before this callback is triggered.\n\nThe message MUST\
-        \ contain either an OnSupportAction with a Support object carrying support\
-        \ contact details and the created or linked ticket reference, or an AsyncError\
-        \ describing why the request could not be processed.\n\nCallback relationship:\
+        \ contain an OnSupportAction with a Support object carrying support contact\
+        \ details and the created or linked ticket reference.\n\nCallback relationship:\
         \ This endpoint is triggered by the PN in response to a /support request.\
         \ The CN MUST use the messageId in Context to correlate this callback with\
         \ the originating /support call and SHOULD present the support information\
@@ -1268,10 +1231,7 @@ paths:
                         type: string
                         const: on_support
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/OnSupportAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/OnSupportAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1537,9 +1497,8 @@ paths:
         \ per-catalog processing results for each catalog submitted in a prior /catalog/publish\
         \ request.\n\nAdditional preconditions: A /catalog/publish request MUST have\
         \ been sent by the PN and accepted (200 Ack) by the CS before this callback\
-        \ is triggered.\n\nThe message MUST contain either a CatalogOnPublishAction\
-        \ with a results array or an AsyncError describing why the request could not\
-        \ be processed. Each successful result carries the catalogId and a processing\
+        \ is triggered.\n\nThe message MUST contain a CatalogOnPublishAction\
+        \ with a results array. Each result carries the catalogId and a processing\
         \ status of ACCEPTED, REJECTED, or PARTIAL, along with any per-item errors.\n\
         \nCallback relationship: Triggered by the CS after indexing each catalog from\
         \ /catalog/publish. The PN MUST use the messageId in Context to correlate\
@@ -1571,10 +1530,7 @@ paths:
                         type: string
                         const: catalog/on_publish
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/CatalogOnPublishAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/CatalogOnPublishAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
@@ -1952,11 +1908,10 @@ paths:
         \ been sent by the DS and accepted (200 Ack) by the CS before this callback\
         \ is triggered. The DS MUST use context.messageId to correlate\
         \ this callback with the originating /catalog/pull request.\n\n
-        \ The message MUST contain either a CatalogPullCallbackAction with \
-        \ a status of COMPLETED or FAILED and either an inline catalogs array (small\
-        \ payload) or a downloadManifest for downloading the result (large payload),\
-        \ or an AsyncError describing why the request could not be processed.\
-        \nA 200 Ack confirms the callback\
+        \ The message MUST contain a CatalogPullCallbackAction with \
+        \ a status of COMPLETED or FAILED,\
+        \ and either an inline catalogs array (small payload) or a downloadManifest\
+        \ for downloading the result (large payload).\n\nA 200 Ack confirms the callback\
         \ was received and accepted by the DS. A 400 NackBadRequest is returned\
         \ when the payload is malformed or required fields are missing. A 401 NackUnauthorized\
         \ is returned when the Authorization header (callback) signature is invalid.\
@@ -1987,10 +1942,7 @@ paths:
                         type: string
                         const: catalog/on_pull
                 message:
-                  description: Exactly one callback outcome, either the successful action or an asynchronous error.
-                  oneOf:
-                  - $ref: '#/components/schemas/CatalogPullCallbackAction'
-                  - $ref: '#/components/schemas/AsyncError'
+                  $ref: '#/components/schemas/CatalogPullCallbackAction'
       responses:
         '200':
           $ref: '#/components/responses/Ack'
